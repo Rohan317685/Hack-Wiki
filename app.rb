@@ -6,6 +6,10 @@ require 'json'
 
 enable :sessions
 
+get '/' do
+    send_file 'index.html'
+end
+
 get '/auth/hack_club' do 
     client_id= ENV['HACKCLUB_CLIENT_ID']
     redirect_uri = "http://localhost:4567/auth/hack_club/callback"
@@ -32,6 +36,7 @@ get '/auth/hack_club/callback' do
         grant_type: 'authorization_code',
         redirect_uri: "http://localhost:4567/auth/hack_club/callback"
     })
+
 
     access_token = JSON.parse(token_response.body)['access_token']
 
