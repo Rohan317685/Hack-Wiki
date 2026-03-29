@@ -15,12 +15,11 @@ get '/auth/hack_club' do
     redirect_uri = "http://localhost:4567/auth/hack_club/callback"
 
 
-auth_url = "https://auth.hackclub.com/oauth/authorize?" +
-    "client_id=#{client_id}&" +
-    "redirect_uri=#{redirect_uri}&" +
-    "response_type=code&" +
-    "scope=openid%20email%20name"
-
+auth_url = "https://auth.hackclub.com/oauth/authorize?" \
+               "client_id=#{client_id}&" \
+               "redirect_uri=#{redirect_uri}&" \
+               "response_type=code&" \
+               "scope=openid%20email%20name"
 
 redirect auth_url
 end 
