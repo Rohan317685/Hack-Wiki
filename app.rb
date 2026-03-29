@@ -4,6 +4,8 @@ require 'dotenv/load'
 require 'rest-client'
 require 'json'
 
+set :public_folder, __dir__ + '/public
+
 enable :sessions
 
 get '/' do
