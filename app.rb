@@ -4,12 +4,12 @@ require 'dotenv/load'
 require 'rest-client'
 require 'json'
 
-set :public_folder, __dir__ + '/public
-
+set :public_folder, __dir__ + '/public'
+set :static_cache_control, [:no_cache, :must_revalidate, :max_age => 0]
 enable :sessions
 
 get '/' do
-    send_file 'index.html'
+    send_file File.join(settings.public_folder, 'index.html')
 end
 
 get '/auth/hack_club' do 
