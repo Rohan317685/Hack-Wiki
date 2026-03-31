@@ -1,8 +1,26 @@
 
-
 #Login-header {
-    text-align: center;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%);
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    color: #000000;
+    color: #ec3750;
 }
+
+#login-page-orpheus {
+    width: 400px;
+}
+
+#login-btn {
+    margin: 0;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
 

@@ -47,5 +47,58 @@ get '/auth/hack_club/callback' do
 
     user_data = JSON.parse(user_response.body)
 
-    "heyo #{user_data['name']}! Your logged in"
+    session[:user_data] = user_data
+
+    "Logged in! <a href='/admin/scan'>Click here to start the scan</a>"
 end 
+
+def fetch_shipped_repos
+
+    url = "https://ships.hackclub.com/api/v1/projects"
+
+    response = RestClient.get(url, {
+        Authorization: "Bearer #{ENV['UNIFIED_DB_API_KEY']}"
+    })
+
+    JSON.parse(response.body)
+end 
+
+get '/admin/scan' do
+ 
+  redirect '/auth/hack_club' unless session[:user_data]
+
+
+  projects = fetch_shipped_repos
+  results = []
+
+  projects.each do |project|
+    repo_url = project.dig('fields', 'repo_url') || project.dig('fields', 'repository') || project['repo_url']
+    next unless repo_url&.include?("github.com")
+
+    begin
+
+      api_url = repo_url.gsub("github.com", "api.github.com/repos")
+
+      RestClient.get(api_url, {
+                "User-Agent" => "Hack-Club-Repo-Checker",
+                "Authorization" => "token #{ENV['GITHUB_TOKEN']}"
+            })
+
+      status = "Public"
+    rescue RestClient::NotFound
+      status = "PRIVATE/DELETED"
+
+    rescue => e
+      status = "Error: #{e.message}"
+    end
+
+    results << { name: project['name'], status: status, url: repo_url }
+
+    sleep 0.05
+  end
+
+
+  content_type :json
+  results.to_json
+end
+
